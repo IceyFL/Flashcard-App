@@ -4,7 +4,7 @@ This is a simple flashcard app i have developed for revision for my GSCE's
 The Release also includes quotations for each of the poems/plays/books i am studying in english literature
 
 # How to use
-To use it you can either compile the source code yourself or simply download the release
+To use it you can either compile the source code by yourself or simply download the release
 You should place all your quotations in a folder called Flashcards which should be in the same directory as the exe
 You can put all your quotations in one file or multiple aslong as the file extension is .txt
 The app will randomly pick a quote from any of the files when you click next
