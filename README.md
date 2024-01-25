@@ -9,7 +9,7 @@ You should place all your quotations in a folder called Flashcards which should 
 You can put all your quotations in one file or multiple aslong as the file extension is .txt
 The app will randomly pick a quote from any of the files when you click next
 If you click on the flashcard it will show the hidden words however you can also use the enter key
-There is a scoreboard on the left keeping track of how many you have got correct
+There's a scoreboard on the left keeping track of how many you have got correct
 The file name of whereaver the quote is from will be displayed at the top of the window
 
 # Design
