@@ -1,5 +1,5 @@
 # Flashcard App
-This is a simple flashcard app i have developed for revision for my GSCE's
+This is a simple flashcard app that I have developed for revision for my GSCE's
 
 The Release also includes quotations for each of the poems/plays/books that I am studying in english literature
 
