@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,7 +9,6 @@ namespace FlashcardApp
     public partial class MainWindow : Window
     {
         string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Flashcards");
-        List<string> Quotes = new List<string>();
         string[] txtFiles;
         string CurrentQuote;
         string BlurredQuote;
@@ -18,18 +17,23 @@ namespace FlashcardApp
         int correctCount = 0;
         bool Checked=false;
         string currentFileName = "";
+        string currentFile = "";
 
         public MainWindow()
         {
             InitializeComponent();
-            LoadFlashcards();
+            NextButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }
 
         public void NextQuote()
         {
+            txtFiles = Directory.GetFiles(folderPath, "*.txt");
             Random random = new Random();
-            int randomIndex = random.Next(0, Quotes.Count);
-            CurrentQuote = Quotes[randomIndex];
+            currentFile = txtFiles[random.Next(txtFiles.Length)];
+            currentFileName = Path.GetFileNameWithoutExtension(Path.GetFileName(currentFile));
+            string[] randomFileContent = File.ReadAllLines(currentFile);
+            string randomLine = randomFileContent[random.Next(randomFileContent.Length)];
+            CurrentQuote = randomLine;
 
             // Split the quote into words
             string[] words = CurrentQuote.Split(' ');
@@ -90,43 +94,30 @@ namespace FlashcardApp
             {
                 count = count + 1;
             }
-            bool temp = true;
-            foreach (string i in BlurredWords)
+
+            if (BlurredWords != null)
             {
-                string cleanedString = new string(i.Where(char.IsLetterOrDigit).ToArray());
-                if (!Guessbox.Text.ToLower().Contains(cleanedString.ToLower()))
+                bool temp = true;
+                foreach (string i in BlurredWords)
                 {
-                    temp = false;
+                    string cleanedString = new string(i.Where(char.IsLetterOrDigit).ToArray());
+                    if (!Guessbox.Text.ToLower().Contains(cleanedString.ToLower()))
+                    {
+                        temp = false;
+                    }
+                }
+
+                if (temp == true)
+                {
+                    correctCount = correctCount + 1;
                 }
             }
-            if (temp == true)
-            {
-                correctCount = correctCount + 1;
-            }
         }
-        public void LoadFlashcards() {
-            if (Directory.Exists(folderPath))
-            {
-                txtFiles = Directory.GetFiles(folderPath, "*.txt");
 
-                // Iterate through each text file
-                foreach (string filePath in txtFiles)
-                {
-                    // Read all lines from the current text file and add them to the list
-                    Quotes.AddRange(File.ReadAllLines(filePath));
-                }
-                // Set the current file name
-                currentFileName = Path.GetFileNameWithoutExtension(txtFiles[0]);
-                // Update the filename TextBox
-                filename.Text = currentFileName;
-                NextQuote();
-            }
-
-        }
         private string SplitTextIntoLines(string text, int charactersPerLine)
         {
             StringBuilder result = new StringBuilder();
-            string[] words = text.Split(' ');
+            string[] words = text?.Split(' ') ?? Array.Empty<string>();
 
             int currentLineLength = 0;
 
@@ -166,11 +157,8 @@ namespace FlashcardApp
                 {
                     Check();
                     Checked = false;
-                    // Set the current file name
-                    currentFileName = Path.GetFileNameWithoutExtension(txtFiles[count % txtFiles.Length]);
-                    // Update the filename TextBox
-                    filename.Text = currentFileName;
                     NextQuote();
+                    filename.Text = currentFileName;
                     ScoreBoard.Text = correctCount.ToString() + "/" + count.ToString();
                     Guessbox.Text = "";
                 }
